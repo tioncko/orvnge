@@ -1,0 +1,50 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="orvnge:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/orvnge_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="orvnge" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/lib/json-20240303.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/postgresql-42.3.9.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/el-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/jasper.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/jsp-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/catalina.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/ecj-4.20.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/jasper-el.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/jaspic-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-jni.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/catalina-ha.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/servlet-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-dbcp.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-jdbc.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-util.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/catalina-ant.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/catalina-ssi.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-coyote.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/websocket-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-cs.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-de.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-es.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-fr.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-ja.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-ko.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-ru.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/annotations-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/catalina-tribes.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-util-scan.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-websocket.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-coyote-ffm.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-pt-BR.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/tomcat-i18n-zh-CN.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../../../Arquivos de Programas (out)/ApacheTomcat-v9.0.109/lib/catalina-storeconfig.jar" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="orvnge/web/Web" />
+    </root>
+  </artifact>
+</component>
