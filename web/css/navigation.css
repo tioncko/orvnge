@@ -1,0 +1,151 @@
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  :root{
+    --bg-page:#1f1a16;
+    --bg-grad-top:#3a2f28;
+    --bg-card:#0f0d0b;
+    --bg-card-soft:#1a1714;
+    --stroke-card:#2a2420;
+    --stroke-soft:#3a332d;
+    --text-strong:#fff4e2;
+    --text-dim:#b8ab9d;
+    --accent:#ff6b00;
+    --pill-bg:#f8ead5;
+    --pill-text:#2b2119;
+    --radius-card:20px;
+    --radius-soft:14px;
+    --shadow-card:0 18px 40px rgba(0,0,0,.6),0 0 30px rgba(255,240,200,.07);
+    --sidebar-bg:#4a2a12;
+    --sidebar-text:#e4f5f8;
+    --sidebar-active-bg:#000a4a;
+    --sidebar-active-text:#ffffff;
+    --stroke-sidebar:rgba(0,0,0,.4);
+    --success:#28a745;
+    --danger:#dc3545;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    color-scheme:dark;
+  }
+  
+  /* layout geral com sidebar fixa */
+  .layout{
+    display:flex;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 50% 0%, var(--bg-grad-top) 0%, var(--bg-page) 60%);
+    color:var(--text-strong);
+  }
+  
+/* sidebar esquerda */
+.sidebar{
+    width:240px;
+    background:var(--sidebar-bg);
+    color:var(--sidebar-text);
+    display:flex;
+    flex-direction:column;
+    padding:20px 16px;
+    border-right:2px solid var(--stroke-sidebar);
+}
+
+.brand-block{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:24px;
+}
+
+.logo-circle{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#000;
+    font-weight:800;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 10px 20px rgba(255,107,0,.4);
+}
+
+.brand-name{
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    line-height:1.2;
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:auto;
+}
+
+.menu-btn{
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    text-align: left;
+    background: transparent;   /* sem fundo por padrão */
+    color: #f7e0d5;
+    border: none;              /* sem bordas */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 180ms ease, color 160ms ease, transform 120ms ease;
+    font-size: 1.1rem;
+    text-decoration: solid;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+.menu-btn.active{
+  background: rgba(255,93,0,0.22);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 4px 0 0 0 rgba(255,93,0,0.95); /* marcador à esquerda */
+}
+
+.menu-btn:hover{
+  background:rgba(255,107,0,.4);
+}
+
+.submenu-list {
+    /* Remove o recuo e os pontos do elemento UL */
+    list-style-type: none; 
+    padding: 0;
+}
+
+.submenu-list li {
+    /* Garante que não haja recuos ou margens nos LI */
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.submenu-list .logout{
+    margin-top: auto;
+}
+
+.logout-area{
+    margin-top:24px;
+    border-top:1px solid rgba(255,255,255,.15);
+    padding-top:16px;
+}
+ 
+/* área principal à direita da sidebar */
+.main-area{
+    flex:1;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .main-frame{
+    flex:1;
+    border:none;
+    width:100%;
+    background:transparent;
+  }

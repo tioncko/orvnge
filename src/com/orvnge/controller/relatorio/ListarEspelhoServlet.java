@@ -14,11 +14,10 @@ public class ListarEspelhoServlet extends HttpServlet {
         String app = "application/json; charset=UTF-8";
         resp.setContentType(app);
 
-        String idCli = req.getParameter("idCli");
         String cpf = req.getParameter("cpf");
 
         RelatoriosService service = new RelatoriosService();
-        JSONArray arr = service.ListarEspelho(cpf, Integer.parseInt(idCli));
+        JSONArray arr = service.ListarEspelho(cpf);
 
         resp.getWriter().write(arr.toString());
     }

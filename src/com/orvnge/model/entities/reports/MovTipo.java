@@ -1,6 +1,7 @@
 package com.orvnge.model.entities.reports;
 
 public class MovTipo {
+    private int id;
     private String mesAno;
     private String nomeGrupo;
     private String infoDesc;
@@ -8,11 +9,20 @@ public class MovTipo {
 
     public MovTipo() {}
 
-    public MovTipo(String mesAno, String nomeGrupo, String infoDesc, String valor) {
+    public MovTipo(int id, String mesAno, String nomeGrupo, String infoDesc, String valor) {
+        this.id = id;
         this.mesAno = mesAno;
         this.nomeGrupo = nomeGrupo;
         this.infoDesc = infoDesc;
         this.valor = valor;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMesAno() {

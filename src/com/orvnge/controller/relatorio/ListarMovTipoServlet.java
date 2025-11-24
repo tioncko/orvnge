@@ -14,13 +14,12 @@ public class ListarMovTipoServlet extends HttpServlet {
         String app = "application/json; charset=UTF-8";
         resp.setContentType(app);
 
-        String idCli = req.getParameter("idCli");
         String cpf = req.getParameter("cpf");
         String mes = req.getParameter("mes");
-        int tipoMov = Integer.parseInt(req.getParameter("tipoMov"));
+        int tipoMov = Integer.parseInt(req.getParameter("idtipoMov"));
 
         RelatoriosService service = new RelatoriosService();
-        JSONArray arr = service.ListarMovTipo(cpf, Integer.parseInt(idCli), mes, tipoMov);
+        JSONArray arr = service.ListarMovTipo(cpf, mes, tipoMov);
 
         resp.getWriter().write(arr.toString());
     }

@@ -15,7 +15,6 @@ public class AtualizarContaServlet extends HttpServlet {
         String saldo = request.getParameter("saldo");
         String idTipoConta = request.getParameter("idTipoConta");
         String idBanco = request.getParameter("idBanco");
-        String idUsuario = request.getParameter("idUsuario");
         String cpf = request.getParameter("cpf");
 
         ContaService service = new ContaService();
@@ -25,7 +24,6 @@ public class AtualizarContaServlet extends HttpServlet {
                 Double.parseDouble(saldo),
                 Integer.parseInt(idBanco),
                 Integer.parseInt(idTipoConta),
-                Integer.parseInt(idUsuario),
                 cpf
         );
 

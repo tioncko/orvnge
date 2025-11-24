@@ -1,71 +1,91 @@
+CREATE OR REPLACE FUNCTION fc_contas_usuario (
+	cliente int
+)
+RETURNS TABLE (
+	idconta INT, conta TEXT, saldoInicial numeric(15,2), clientId INT
+)
+as $$
+begin
+return query
+select c.idconta, c.nconta || '/' || t.nometipoconta, c.saldoinicial, c.idcliente
+from conta c
+         inner join tipoconta t on t.idtipoconta = c.idtipoconta
+where idcliente = cliente;
+end;
+$$ language plpgsql;
+--select * from fc_contas_usuario(1)
+
 --[] Total por tipo de movimentação
 CREATE OR REPLACE FUNCTION fc_total_movimentacao(
-    conta INT, mes TEXT, tipoMov INT
+    cliente INT, mes TEXT, tipoMov INT
 )
 RETURNS TABLE (
 	valor NUMERIC(15,2)
 )
 AS $$
 BEGIN
-    RETURN QUERY
-    select sum(m.valor) totalMov from Movimentacao m 
-    inner join grupomov g on g.idgrupomov = m.idgrupomov
-    where g.idtipomov = tipoMov
-        and idconta = conta
-        and to_char(data, 'MM') = mes; 
+RETURN QUERY
+select sum(m.valor) totalMov from Movimentacao m
+                                      inner join grupomov g on g.idgrupomov = m.idgrupomov
+                                      inner join conta c on c.idconta = m.idconta
+where g.idtipomov = tipoMov
+  and idcliente = cliente
+  and to_char(data, 'MM') = mes;
 END;
 $$ LANGUAGE plpgsql;
-select * from fc_total_movimentacao(1, '11', 1); --despesa
+select * from fc_total_movimentacao(8, '11', 1); --despesa
 select * from fc_total_movimentacao(1, '11', 2); --receita
 
 -- Total das movimentaçõe por mês (grafico de linha)
 CREATE OR REPLACE FUNCTION fc_movimentacao_mes(
-    conta INT, mes TEXT,tipoMov INT
+    cliente INT, mes TEXT,tipoMov INT
 )
 RETURNS TABLE (
     mesAno TEXT, totalMes NUMERIC(15,2)
 )
 AS $$
 BEGIN
-    RETURN QUERY
-    select to_char(data, 'MM/YYYY') mes, sum(m.valor) totalData from Movimentacao m
-    inner join grupomov g on g.idgrupomov = m.idgrupomov
-    where g.idtipomov = tipoMov
-        and idconta = conta
-        and to_char(data, 'MM') = mes
-    group by to_char(data, 'MM/YYYY')
-    order by to_char(data, 'MM/YYYY');
+RETURN QUERY
+select to_char(data, 'MM/YYYY') mes, sum(m.valor) totalData from Movimentacao m
+                                                                     inner join grupomov g on g.idgrupomov = m.idgrupomov
+                                                                     inner join conta c on c.idconta = m.idconta
+where g.idtipomov = tipoMov
+  and idcliente = cliente
+  and to_char(data, 'MM') = mes
+group by to_char(data, 'MM/YYYY')
+order by to_char(data, 'MM/YYYY');
 END;
 $$ LANGUAGE plpgsql;
-select * from fc_movimentacao_mes(1, '11', 1); --despesa
-select * from fc_movimentacao_mes(1, '11', 2); --receita
+select * from fc_movimentacao_mes(8, '11', 1); --despesa
+select * from fc_movimentacao_mes(8, '11', 2); --receita
 
 -- combobox despesa/receita | combobox mes | combobox grupo
 --[] Tela de cadastro
-CREATE OR REPLACE FUNCTION fc_movimentacao_tipo(
-    conta INT, mes TEXT, tipoMov INT
+create or replace FUNCTION fc_movimentacao_tipo(
+    cliente INT, mes TEXT, tipoMov INT
 )
 RETURNS TABLE (
-    mesAno TEXT, nomeGrupo VARCHAR(50), infoDesc TEXT, valor NUMERIC(15,2)
+    id int, mesAno TEXT, nomeGrupo VARCHAR(50), infoDesc TEXT, valor NUMERIC(15,2)
 )
 AS $$
 BEGIN
-    RETURN QUERY
-    select to_char(data, 'dd-') || getMonth(to_char(data, 'MM')) mesAno, g.nomegrupomov, descricao, m.valor totalData 
-    from Movimentacao m
-    inner join grupomov g on g.idgrupomov = m.idgrupomov
-    where g.idtipomov = tipoMov
-        and idconta = conta
-        and to_char(data, 'MM') = mes
-    order by to_char(data, 'dd-') || getMonth(to_char(data, 'MM'));
+RETURN QUERY
+select idmov, to_char(data, 'dd-') || getMonth(to_char(data, 'MM')) || to_char(data, '-yyyy') mesAno, g.nomegrupomov, descricao, m.valor totalData
+from Movimentacao m
+         inner join grupomov g on g.idgrupomov = m.idgrupomov
+         inner join conta c on c.idconta = m.idconta
+where g.idtipomov = tipoMov
+  and idcliente = cliente
+  and to_char(data, 'MM') = mes
+order by to_char(data, 'dd-') || getMonth(to_char(data, 'MM')) || to_char(data, '-yyyy') ;
 END;
 $$ LANGUAGE plpgsql;
-select * from fc_movimentacao_tipo(1, '11', 1);
+--select * from fc_movimentacao_tipo(8, '11', 1);
 
 -- [] Total por grupo de movimentação (usado no grafico de barras)
 -- Ficar atento a possibilidade do cliente ter mais de uma conta e ser necessário criar um combobox com as contas
 CREATE OR REPLACE FUNCTION fc_movimentacao_grupo(
-    conta INT, mes TEXT, tipoMov INT
+    cliente INT, mes TEXT, tipoMov INT
 )
 RETURNS TABLE (
     nomeGrupo VARCHAR(50), totalGrupo NUMERIC(15,2)
@@ -73,40 +93,41 @@ RETURNS TABLE (
 AS $$
 BEGIN
     IF mes = '00' then
-    begin
         RETURN QUERY
         WITH cte AS (
             SELECT g.idgrupomov, g.nomegrupomov, SUM(m.valor) AS totalGrupo
-            FROM Movimentacao m 
-            RIGHT JOIN grupomov g ON g.idgrupomov = m.idgrupomov 
-            WHERE idconta = conta
+            FROM Movimentacao m
+            RIGHT JOIN grupomov g ON g.idgrupomov = m.idgrupomov
+			RIGHT join conta c on c.idconta = m.idconta
+            WHERE idcliente = cliente
             GROUP BY g.idgrupomov, g.nomegrupomov
         )
-        SELECT 
-            g.nomegrupomov, COALESCE(c.totalGrupo, 0.00) AS totalGrupo
-        FROM grupomov g
-        LEFT JOIN cte c ON c.idgrupomov = g.idgrupomov
-        WHERE g.idtipomov = tipoMov;
-    end
-    else
+SELECT
+    g.nomegrupomov, COALESCE(c.totalGrupo, 0.00) AS totalGrupo
+FROM grupomov g
+         LEFT JOIN cte c ON c.idgrupomov = g.idgrupomov
+WHERE g.idtipomov = tipoMov;
+
+else
         RETURN QUERY
         WITH cte AS (
             SELECT g.idgrupomov, g.nomegrupomov, SUM(m.valor) AS totalGrupo
-            FROM Movimentacao m 
-            RIGHT JOIN grupomov g ON g.idgrupomov = m.idgrupomov 
-            WHERE idconta = conta
+            FROM Movimentacao m
+            RIGHT JOIN grupomov g ON g.idgrupomov = m.idgrupomov
+			RIGHT join conta c on c.idconta = m.idconta
+            WHERE idcliente = cliente
               AND TO_CHAR(data, 'MM') = mes
             GROUP BY g.idgrupomov, g.nomegrupomov
         )
-        SELECT 
-            g.nomegrupomov, COALESCE(c.totalGrupo, 0.00) AS totalGrupo
-        FROM grupomov g
-        LEFT JOIN cte c ON c.idgrupomov = g.idgrupomov
-        WHERE g.idtipomov = tipoMov;
-    end if
+SELECT
+    g.nomegrupomov, COALESCE(c.totalGrupo, 0.00) AS totalGrupo
+FROM grupomov g
+         LEFT JOIN cte c ON c.idgrupomov = g.idgrupomov
+WHERE g.idtipomov = tipoMov;
+end if;
 END;
 $$ LANGUAGE plpgsql;
-select * from fc_movimentacao_grupo(1, '11', 1)
+--select * from fc_movimentacao_grupo(8, '11', 1)
 
 -- custo-mes é tudo que foi gasto no mes
 -- saldo é a subtração do que entrou de receita menos o custo-mes
@@ -146,8 +167,9 @@ $$ LANGUAGE plpgsql;
 select * from fc_saldo_mensal(1, '01')
 */
 
+
 CREATE OR REPLACE FUNCTION fc_espelho (
-    conta int
+    cliente int
 )
 returns TABLE (
     mesAno TEXT, despesa NUMERIC(15,2), receita NUMERIC(15,2), saldo_meio NUMERIC(15,2), saldo_fim NUMERIC(15,2)
@@ -155,35 +177,42 @@ returns TABLE (
 as $$
 BEGIN
     --despesa
-	drop table if exists mov_despesa;
-    CREATE TABLE mov_despesa (mesAno TEXT, valor NUMERIC(15,2));
+drop table if exists mov_despesa;
+CREATE TABLE mov_despesa (mesAno TEXT, valor NUMERIC(15,2));
 
-    insert into mov_despesa (mesAno, valor)
-    select to_char(data, 'MM/YYYY') mes, sum(m.valor) totalData from Movimentacao m
-    inner join grupomov g on g.idgrupomov = m.idgrupomov
-    where g.idtipomov = 1 and idconta = 1
-    group by to_char(data, 'MM/YYYY')
-    order by to_char(data, 'MM/YYYY');
+insert into mov_despesa (mesAno, valor)
+select to_char(data, 'MM/YYYY') mes, sum(m.valor) totalData from Movimentacao m
+                                                                     inner join grupomov g on g.idgrupomov = m.idgrupomov
+                                                                     inner join conta c on c.idconta = m.idconta
+where g.idtipomov = 1 and idcliente = cliente
+group by to_char(data, 'MM/YYYY')
+order by to_char(data, 'MM/YYYY');
 
-    --receita
-	drop table if exists mov_receita;
-    CREATE TABLE mov_receita (mesAno TEXT, valor NUMERIC(15,2));
+--receita
+drop table if exists mov_receita;
+CREATE TABLE mov_receita (mesAno TEXT, valor NUMERIC(15,2));
 
-    insert into mov_receita (mesAno, valor)
-    select to_char(data, 'MM/YYYY') mes, sum(m.valor) totalData from Movimentacao m
-    inner join grupomov g on g.idgrupomov = m.idgrupomov
-    where g.idtipomov = 2 and idconta = conta
-    group by to_char(data, 'MM/YYYY')
-    order by to_char(data, 'MM/YYYY');
+insert into mov_receita (mesAno, valor)
+select to_char(data, 'MM/YYYY') mes, sum(m.valor) totalData from Movimentacao m
+                                                                     inner join grupomov g on g.idgrupomov = m.idgrupomov
+                                                                     inner join conta c on c.idconta = m.idconta
+where g.idtipomov = 2 and idcliente = cliente
+group by to_char(data, 'MM/YYYY')
+order by to_char(data, 'MM/YYYY');
 
-    RETURN QUERY
-    select d.mesAno, d.valor despesa, r.valor receita, ed.saldoMeio middle, ed.saldoFim fim
-    from mov_despesa d
-    left join mov_receita r on d.mesAno = r.mesAno
-    left join fc_espelho_controle(conta) ed on ed.mesRef = d.mesAno;
+RETURN QUERY
+select
+    d.mesAno,
+    coalesce(d.valor, 0.00) despesa,
+    coalesce(r.valor, 0.00) receita,
+    coalesce(ed.saldoMeio, 0.00) middle,
+    coalesce(ed.saldoFim, 0.00) fim
+from mov_despesa d
+         left join mov_receita r on d.mesAno = r.mesAno
+         left join fc_espelho_controle(cliente) ed on ed.mesRef = d.mesAno;
 END;
 $$ LANGUAGE plpgsql;
---select * from fc_espelho(1);
+--select * from fc_espelho(8);
 
 CREATE OR REPLACE FUNCTION fc_espelho_controle(
     conta INT
@@ -232,7 +261,7 @@ $$ LANGUAGE plpgsql;
 --select * from fc_espelho_controle(1);
 
 CREATE OR REPLACE FUNCTION fc_saldo_mes(
-    conta int, mes text
+    cliente int, mes text
 )
 RETURNS TABLE (
     mesAno text,
@@ -254,60 +283,60 @@ BEGIN
     RETURN QUERY
         with cte as (
 			select to_char(datasaldo, 'MM/YYYY') mesAno, saldoperiodo, datasaldo
-        	from fc_levantamento_mensal(conta, mes)		
-		)		
-		select pt1.mesAno, pt1.saldoperiodo mid1, pt2.saldoperiodo mid2 
+        	from fc_levantamento_mensal(cliente, mes)
+			where datasaldo between "start" and mid_1
+		)
+        select coalesce(pt1.mesAno, pt2.mesAno) mesAno, coalesce(pt1.saldoperiodo, 0.00) mid1, coalesce(pt2.saldoperiodo, 0.00) mid2
         from cte pt1
-		inner join (
-        	select to_char(datasaldo, 'MM/YYYY') mesAno, saldoperiodo
-        	from fc_levantamento_mensal(conta, mes)
-        	where datasaldo between mid_2 and "end"
-        	order by dataSaldo desc
-		) pt2 on pt1.mesAno = pt2.mesAno
-        where datasaldo between "start" and mid_1
+            right join (
+        select to_char(datasaldo, 'MM/YYYY') mesAno, saldoperiodo
+        from fc_levantamento_mensal(cliente, mes)
+        where datasaldo between mid_2 and "end"
         order by dataSaldo desc
-        limit 1;	
+    ) pt2 on pt1.mesAno = pt2.mesAno
+    order by dataSaldo desc
+    limit 1;
 END;
 $$ LANGUAGE plpgsql;
 --select * from fc_saldo_mes(1, '02')
 
 CREATE OR REPLACE FUNCTION fc_levantamento_mensal(
-    conta INT, mes TEXT
+    cliente INT, mes TEXT
 )
 RETURNS TABLE (
     dataSaldo DATE, saldoPeriodo NUMERIC(15,2), contaid INT
 )
 as $$
 BEGIN
-    RETURN QUERY
+RETURN QUERY
     with cte as (
-        select m.idmov, m.data, m.descricao, c.saldoinicial, 
+        select m.idmov, m.data, m.descricao, c.saldoinicial,
         case when g.idtipomov = 1 then valor else 0.00 end despesa,
         case when g.idtipomov = 2 then valor else 0.00 end receita,
         m.idconta,
         row_number() over (partition by m.idconta order by m.data asc) seq
-        from Movimentacao m 
+        from Movimentacao m
         inner join grupomov g on g.idgrupomov = m.idgrupomov
         inner join conta c on c.idconta = m.idconta
-        where c.idconta = conta
+        where c.idcliente = cliente
         order by data
     ),
     releaseValue as (
     	select
-    	seq, data, descricao, idconta, saldoinicial + 
+    	seq, data, descricao, idconta, saldoinicial +
     	sum(receita - despesa) over (partition by idconta order by seq asc) saldoAtual
     	from cte
     )
-    SELECT data, saldoatual, idconta
-    FROM (
-        SELECT *, ROW_NUMBER() OVER (PARTITION BY data ORDER BY seq DESC) AS rn
-        FROM releaseValue
-    	where to_char(data, 'MM') = mes
-    ) t
-    WHERE rn = 1;
+SELECT data, saldoatual, idconta
+FROM (
+         SELECT *, ROW_NUMBER() OVER (PARTITION BY data ORDER BY seq DESC) AS rn
+         FROM releaseValue
+         where to_char(data, 'MM') = mes
+     ) t
+WHERE rn = 1;
 END;
 $$ LANGUAGE plpgsql;
---select * from fc_levantamento_mensal(1, '01')
+--select * from fc_levantamento_mensal(1, '11')
 
 
 CREATE OR REPLACE FUNCTION getDate(mes TEXT)
@@ -412,15 +441,6 @@ CREATE TABLE Movimentacao (
         REFERENCES GrupoMov (IdGrupoMov)
 );
 
-drop table saldo
-CREATE TABLE Saldo (
-    IdSaldo SERIAL PRIMARY KEY,
-    Data DATE NOT NULL,
-    SaldoAtual NUMERIC(15,2) NOT NULL,
-    IdConta INT NOT NULL,
-    CONSTRAINT fk_saldomensal_conta FOREIGN KEY (IdConta)
-        REFERENCES Conta (IdConta) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 INSERT INTO Usuario (Email, CPF, Nome, Tel, Senha)
 VALUES
@@ -445,7 +465,7 @@ VALUES
 ('Conta Salário'),
 ('Conta Digital');
 
-INSERT INTO Conta (NConta, Saldo, IdCliente, IdBanco, IdTipoConta)
+INSERT INTO Conta (NConta, SaldoInicial, IdCliente, IdBanco, IdTipoConta)
 VALUES
 ('12345-6', 1500.00, 1, 1, 1),
 ('78910-2', 3000.00, 2, 2, 2),

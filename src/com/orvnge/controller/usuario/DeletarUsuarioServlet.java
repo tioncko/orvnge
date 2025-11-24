@@ -10,14 +10,13 @@ import java.io.IOException;
 @WebServlet("/deletar-usuario")
 public class DeletarUsuarioServlet extends HttpServlet {
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String idUsuario = req.getParameter("idUsuario");
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
+
         String cpf = req.getParameter("cpf");
 
         UsuarioService service = new UsuarioService();
-        service.excluirUsuario(cpf, Integer.parseInt(idUsuario));
+        service.excluirUsuario(cpf);
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("/orvnge/usuario/listar-usuarios");
     }
 }

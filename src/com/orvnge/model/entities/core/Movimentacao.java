@@ -13,6 +13,14 @@ public class Movimentacao {
     public Movimentacao() {
     }
 
+    public Movimentacao(LocalDate dataMov, String descricao, double valor, Conta conta, GrupoMov grupoMov) {
+        this.dataMov = dataMov;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.conta = conta;
+        this.grupoMov = grupoMov;
+    }
+
     public Movimentacao(int idMov, LocalDate dataMov, String descricao, double valor, Conta conta, GrupoMov grupoMov) {
         this.idMov = idMov;
         this.dataMov = dataMov;
@@ -75,4 +83,5 @@ public class Movimentacao {
         return "Movimentacao [idMov=" + idMov + ", valor=" + valor + ", dataMov=" + dataMov +
                ", conta=" + conta + ", grupoMov=" + grupoMov + "]";
     }
+
 }

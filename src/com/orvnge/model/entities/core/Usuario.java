@@ -11,6 +11,22 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String nome, String cpf, String tel, String email, String senha) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.tel = tel;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public Usuario(int id, String nome, String cpf, String tel, String email) {
+        this.idCli = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.tel = tel;
+        this.email = email;
+    }
+
     public Usuario(int id, String nome, String cpf, String tel, String email, String senha) {
         this.idCli = id;
         this.nome = nome;

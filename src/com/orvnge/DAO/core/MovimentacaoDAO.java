@@ -13,25 +13,23 @@ import java.util.*;
 
 public class MovimentacaoDAO {
     public void inserir(Movimentacao mov) {
-        String sql = "INSERT INTO movimentacao (idMov, data, Descricao, Valor, IdConta, IdGrupoMov) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO movimentacao (data, Descricao, Valor, IdConta, IdGrupoMov) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conexao = DBConnection.getConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setInt(1, mov.getIdMov());
-
             if (mov.getDataMov() != null) {
                 LocalDate dataMov = mov.getDataMov();
-                stmt.setDate(2, Date.valueOf(dataMov));
+                stmt.setDate(1, Date.valueOf(dataMov));
             } else {
-                stmt.setNull(2, Types.DATE);
+                stmt.setNull(1, Types.DATE);
             }
-            stmt.setString(3, mov.getDescricao());
-            stmt.setDouble(4, mov.getValor());
+            stmt.setString(2, mov.getDescricao());
+            stmt.setDouble(3, mov.getValor());
 
-            stmt.setInt(5, mov.getConta().getIdConta());
-            stmt.setInt(6, mov.getGrupoMov().getIdGrupoMov());
+            stmt.setInt(4, mov.getConta().getIdConta());
+            stmt.setInt(5, mov.getGrupoMov().getIdGrupoMov());
 
             stmt.executeUpdate();
 
@@ -128,6 +126,7 @@ public class MovimentacaoDAO {
         Movimentacao mov = new Movimentacao();
         mov.setIdMov(rs.getInt("idMov"));
         mov.setValor(rs.getDouble("valor"));
+        mov.setDescricao(rs.getString("descricao"));
 
         Date data = rs.getDate("data");
         if (data != null) {

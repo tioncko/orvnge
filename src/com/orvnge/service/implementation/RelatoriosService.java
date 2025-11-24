@@ -13,9 +13,9 @@ public class RelatoriosService implements IRelatorio {
     private final UsuarioDAO dao_us = new UsuarioDAO();
 
     @Override
-    public JSONArray ListarEspelho(String cpf, int idCli) {
+    public JSONArray ListarEspelho(String cpf) {
         EspelhoDAO dao_es = new EspelhoDAO();
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
         List<Espelho> espelho = dao_es.listarTodos(usr);
 
         JSONArray arr = new JSONArray();
@@ -33,9 +33,9 @@ public class RelatoriosService implements IRelatorio {
     }
 
     @Override
-    public JSONArray ListarMovGrupo(String cpf, int idCli, String mes, int tipoMov) {
+    public JSONArray ListarMovGrupo(String cpf, String mes, int tipoMov) {
         MovGrupoDAO dao = new MovGrupoDAO();
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
         List<MovGrupo> movGrupo = dao.listarTodos(usr, mes, tipoMov);
 
         JSONArray arr = new JSONArray();
@@ -50,9 +50,9 @@ public class RelatoriosService implements IRelatorio {
     }
 
     @Override
-    public JSONArray ListarMovMes(String cpf, int idCli, String mes, int tipoMov) {
+    public JSONArray ListarMovMes(String cpf, String mes, int tipoMov) {
         MovMesDAO dao = new MovMesDAO();
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
         List<MovMes> movMes = dao.listarTodos(usr, mes, tipoMov);
 
         JSONArray arr = new JSONArray();
@@ -67,15 +67,16 @@ public class RelatoriosService implements IRelatorio {
     }
 
     @Override
-    public JSONArray ListarMovTipo(String cpf, int idCli, String mes, int tipoMov) {
+    public JSONArray ListarMovTipo(String cpf, String mes, int tipoMov) {
         MovTipoDAO dao = new MovTipoDAO();
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
         List<MovTipo> movTipo = dao.listarTodos(usr, mes, tipoMov);
 
         JSONArray arr = new JSONArray();
 
         for (MovTipo m : movTipo) {
             JSONObject obj = new JSONObject();
+            obj.put("id", m.getId());
             obj.put("mesAno", m.getMesAno());
             obj.put("nomeGrupo", m.getNomeGrupo());
             obj.put("infoDesc", m.getInfoDesc());
@@ -86,9 +87,9 @@ public class RelatoriosService implements IRelatorio {
     }
 
     @Override
-    public JSONArray ListarTotalMov(String cpf, int idCli, String mes, int tipoMov) {
+    public JSONArray ListarTotalMov(String cpf, String mes, int tipoMov) {
         TotalMovDAO dao = new TotalMovDAO();
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
         List<TotalMov> totalMov = dao.listarTodos(usr, mes, tipoMov);
 
         JSONArray arr = new JSONArray();

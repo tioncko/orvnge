@@ -13,7 +13,6 @@ public class AtualizarUsuarioServlet extends HttpServlet {
         String idUsuario = request.getParameter("idUsuario");
         String nome = request.getParameter("nome");
         String cpf = request.getParameter("cpf");
-        String senha = request.getParameter("senha");
         String email = request.getParameter("email");
         String telefone = request.getParameter("telefone");
 
@@ -22,11 +21,10 @@ public class AtualizarUsuarioServlet extends HttpServlet {
                 Integer.parseInt(idUsuario),
                 nome,
                 cpf,
-                senha,
                 email,
                 telefone
         );
 
-        resp.sendRedirect("/orvnge/usuario/listar-usuarios");
+        resp.sendRedirect(request.getContextPath() + "/pages/dashboard.jsp");
     }
 }

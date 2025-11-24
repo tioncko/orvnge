@@ -10,6 +10,6 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
-        response.sendRedirect("pages/index.jsp");
+        response.sendRedirect("pages/login.jsp");
     }
 }

@@ -7,4 +7,5 @@ public interface ILista {
     public JSONArray ListarTipoConta();
     public JSONArray ListarTipoMov();
     public JSONArray ListarGrupoMov();
+    public JSONArray ListarContaUsuario(int idCli);
 }

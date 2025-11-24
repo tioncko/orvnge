@@ -14,11 +14,11 @@ public class MovimentacaoService implements IMovimentacao {
     private final GrupoMovDAO dao_gm = new GrupoMovDAO();
 
     @Override
-    public void cadastrarMovimentacao(int idMov, LocalDate dataMov, String descricao, double valor, int idConta, int idGrupoMov) {
+    public void cadastrarMovimentacao(LocalDate dataMov, String descricao, double valor, int idConta, int idGrupoMov) {
         Conta conta = dao_ct.buscarPorId(idConta);
         GrupoMov grupoMov = dao_gm.buscarPorId(idGrupoMov);
 
-        Movimentacao mov = new Movimentacao(idMov, dataMov, descricao, valor, conta, grupoMov);
+        Movimentacao mov = new Movimentacao(dataMov, descricao, valor, conta, grupoMov);
         dao_mv.inserir(mov);
     }
 

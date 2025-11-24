@@ -12,20 +12,20 @@ public class ContaService implements IConta {
     private final UsuarioDAO dao_us = new UsuarioDAO();
 
     @Override
-    public void cadastrarConta(int idConta, String numConta, double saldo, int idBanco, int idTipoConta, int idCli, String cpf) {
+    public void cadastrarConta(int idConta, String numConta, double saldo, int idBanco, int idTipoConta, String cpf) {
         Banco banco = dao_bc.buscarPorId(idBanco);
         TipoConta tipoConta = dao_tc.buscarPorId(idTipoConta);
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
 
         Conta ct = new Conta(idConta, numConta, saldo, banco, tipoConta, usr);
         dao_ct.inserir(ct);
     }
 
     @Override
-    public void alterarConta(int idConta, String numConta, double saldo, int idBanco, int idTipoConta, int idCli, String cpf) {
+    public void alterarConta(int idConta, String numConta, double saldo, int idBanco, int idTipoConta, String cpf) {
         Banco banco = dao_bc.buscarPorId(idBanco);
         TipoConta tipoConta = dao_tc.buscarPorId(idTipoConta);
-        Usuario usr = dao_us.buscarPorCpf(cpf, idCli);
+        Usuario usr = dao_us.buscarPorCpf(cpf);
 
         Conta ct = new Conta(idConta, numConta, saldo, banco, tipoConta, usr);
         dao_ct.atualizar(ct);

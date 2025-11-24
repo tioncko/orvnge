@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class CadastrarMovServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String idMov = request.getParameter("idMov");
         String dataMov = request.getParameter("dataMov");
         String descricao = request.getParameter("descricao");
         String valor = request.getParameter("valor");
@@ -20,14 +19,13 @@ public class CadastrarMovServlet extends HttpServlet {
 
         MovimentacaoService service = new MovimentacaoService();
         service.cadastrarMovimentacao(
-                Integer.parseInt(idMov),
                 LocalDate.parse(dataMov),
                 descricao,
-                Double.parseDouble(valor),
+                Double.parseDouble(valor.trim().replace(',', '.')),
                 Integer.parseInt(idConta),
                 Integer.parseInt(idGrupoMov)
         );
 
-        response.sendRedirect("/orvnge/movimentacao/listar-movimentacoes");
+        response.sendRedirect(request.getContextPath() + "/pages/cadastroMovimentacao.jsp");
     }
 }

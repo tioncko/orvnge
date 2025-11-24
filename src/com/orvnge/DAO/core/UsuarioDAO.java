@@ -25,28 +25,27 @@ public class UsuarioDAO {
     }
 // Todos os metodos de atualizar serão ajustados para alteração individual
     public void atualizar(Usuario u) {
-        String sql = "UPDATE usuario SET nome = ?, tel = ?, email = ?, senha = ? WHERE cpf = ?";
+        String sql = "UPDATE usuario SET nome = ?, tel = ?, email = ?, cpf = ? WHERE idcliente = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, u.getNome());
             ps.setString(2, u.getTel());
             ps.setString(3, u.getEmail());
-            ps.setString(4, u.getSenha());
-            ps.setString(5, u.getCpf());
+            ps.setString(4, u.getCpf());
+            ps.setInt(5, u.getIdCli());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deletar(String cpf, int idCliente) {
-        String sql = "DELETE FROM usuario WHERE cpf = ? and idcliente = ?";
+    public void deletar(String cpf) {
+        String sql = "DELETE FROM usuario WHERE cpf = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, cpf);
-            ps.setInt(2, idCliente);
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -54,19 +53,53 @@ public class UsuarioDAO {
         }
     }
 
-    public Usuario buscarPorCpf(String cpf, int idCliente) {
-        String sql = "SELECT * FROM usuario WHERE cpf = ? and idCliente = ?";
+    public Usuario buscarPorCpf(String cpf) {
+        String sql = "SELECT * FROM usuario WHERE cpf = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, cpf);
-            ps.setInt(2, idCliente);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return montarUsuario(rs);
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return new Usuario();
+    }
+
+    public Usuario buscarPorId(int id) {
+        String sql = "SELECT * FROM usuario WHERE idCliente = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return montarUsuario(rs);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return new Usuario();
+    }
+
+    public Usuario buscarPorEmail(String usr) {
+        String sql = "SELECT * FROM USUARIO WHERE email = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usr);
+
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                return montarUsuario(rs);
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return new Usuario();
@@ -91,9 +124,22 @@ public class UsuarioDAO {
         return false;
     }
 
+    public void atualizarSenha(int id, String senha) {
+        String sql = "UPDATE usuario SET senha = ? WHERE idCliente = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, senha);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Usuario montarUsuario(ResultSet rs) throws SQLException {
         Usuario usr = new Usuario();
-        usr.setIdCli(rs.getInt("idCli"));
+        usr.setIdCli(rs.getInt("idCliente"));
         usr.setCpf(rs.getString("cpf"));
         usr.setNome(rs.getString("nome"));
         usr.setTel(rs.getString("tel"));

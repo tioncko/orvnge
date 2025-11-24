@@ -1,0 +1,316 @@
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root{
+  --bg-page:#1f1a16;
+  --bg-grad-top:#3a2f28;
+  --radius-softest:12px;
+  --bg-card-soft:#1a1714;
+  --stroke-card:#2a2420;
+  --stroke-soft:#3a332d;
+  --text-strong:#fff4e2;
+  --text-dim:#b8ab9d;
+  --bg-card:#0f0d0b;
+  --pill-text:#2b2119;
+  --radius-card:20px;
+  --radius-soft:14px;
+  --shadow-card:0 18px 40px rgba(0,0,0,.6),0 0 30px rgba(255,240,200,.07);
+  --sidebar-bg:#4a2a12;
+  --pill-bg:#f8ead5;
+  --sidebar-active-text:#ffffff;
+  --success:#28a745;
+  --danger:#dc3545;
+  --accent: #e0b782;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:dark;
+  --pill:#f8ead5;
+  --radius:18px;
+  --shadow:0 18px 40px rgba(0,0,0,.6),0 0 30px rgba(255,240,200,.07);
+  --sidebar-text:#fff1dd;
+  --sidebar-active-bg:#603218;
+  --stroke-sidebar:rgba(0,0,0,.7);
+}
+
+/* corpo do dashboard dentro do iframe */
+.page-body{
+  background:transparent;
+  color:var(--text-strong);
+  padding:24px 24px 80px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+/* cards de saldo topo */
+.top-cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+.stat-card{
+  background:var(--bg-card);
+  border:1px solid var(--stroke-card);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);
+  padding:16px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.stat-card .label{
+  font-size:13px;
+  color:var(--text-dim);
+  font-weight:500;
+}
+
+.stat-card .value{
+  font-size:20px;
+  font-weight:700;
+  color:var(--text-strong);
+}
+
+.stat-card .sub{
+  font-size:12px;
+  color:var(--text-dim);
+  font-weight:400;
+}
+
+/* bloco gráfico + tabela */
+.panel-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+@media (max-width:1100px){
+  .panel-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+.panel-box{
+  background:var(--bg-card);
+  border:1px solid var(--stroke-card);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);
+  padding:16px 20px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  min-height:320px;
+}
+
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.panel-title{
+  font-size:15px;
+  font-weight:600;
+  color:var(--text-strong);
+}
+
+.ver-mais{
+  font-size:13px;
+  color:var(--text-strong);
+  text-decoration:none;
+}
+.ver-mais:hover{
+  color:var(--accent);
+}
+
+/* gráfico */
+#graficoLinha{
+  width:100%;
+  height:220px;
+}
+
+/* tabela */
+.table-wrap{
+  overflow-x:auto;
+}
+
+.table-fin{
+  border-collapse:collapse;
+  border:1px solid var(--bg-card-soft);
+  width:100%;
+  min-width:600px;
+  font-size:13px;
+  line-height:1.4;
+  color:var(--text-strong);
+}
+
+.table-fin thead tr th{
+  text-align:left;
+  font-weight:700;
+  padding:8px 10px;
+  color:#fff;
+  border:1px solid #000;
+  background:linear-gradient(#00404f,#002c37);
+}
+
+.table-fin thead tr th:nth-child(2){
+  background:linear-gradient(#7a0000,#300);
+}
+.table-fin thead tr th:nth-child(3),
+.table-fin thead tr th:nth-child(4),
+.table-fin thead tr th:nth-child(5){
+  background:linear-gradient(#004f00,#012b01);
+}
+.table-fin thead tr th:nth-child(6){
+  background:linear-gradient(#4d002a,#1b0010);
+}
+
+.table-fin tbody tr td{
+  border:1px solid var(--stroke-soft);
+  padding:6px 10px;
+  background:var(--bg-card-soft);
+  color:var(--text-strong);
+  font-weight:400;
+  white-space:nowrap;
+}
+
+/* valor positivo verde */
+.table-fin tbody tr td.positivo{
+  color:#00d66b;
+  font-weight:600;
+}
+
+/* custo vermelho */
+.table-fin tbody tr td.custo{
+  color:#ff4040;
+  font-weight:600;
+}
+
+/* mês azul */
+.table-fin tbody tr td.mes{
+  color:#7bd3ff;
+  font-weight:600;
+}
+
+.chart-container {
+    width: 100%;
+    max-height: 400px;
+    margin: 20px 0;
+    padding: 15px;
+    background: var(--card-soft, #171310);
+    border-radius: var(--radius, 8px);
+    box-shadow: var(--shadow, 0 2px 4px rgba(0,0,0,0.1));
+}
+.saldo-positivo {
+    color: var(--success, #28a745);
+}
+
+.saldo-negativo {
+    color: var(--danger, #dc3545);
+}
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.card {
+    background: var(--card-soft, #171310);
+    padding: 1.5rem;
+    border-radius: var(--radius, 8px);
+    box-shadow: var(--shadow);
+}
+
+.card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.card span {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card small {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--muted);
+}
+
+.entradas span {
+    color: var(--success, #28a745);
+}
+
+.toolbar {
+  display:flex;
+  gap:10px;
+  margin-top:10px
+}
+
+.field {
+  display:flex;
+  flex-direction:column;
+  gap:6px
+}
+
+.field label {
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600
+}
+
+.field input,
+.field select{
+  background:var(--card-soft);
+  color:var(--text);
+  border:1px solid #504138;
+  border-radius:var(--radius-soft);
+  padding:12px 14px;
+  font-size:14px;
+  outline:0;
+}
+.field input:focus,
+.field select:focus {
+  border-color:#514438;
+  box-shadow:0 0 8px rgba(255,234,200,.25)
+}
+
+/* Estiliza o campo SELECT (a caixa que fica visível) */
+select {
+  /* 1. Cor de Fundo para PRETO ou Escuro */
+  background-color: #171310; /* Preto sólido */
+
+  /* 2. Cor do Texto para BRANCO ou Claro */
+  color: #ffffff; /* Branco para o texto */
+
+  /* 3. Estilo opcional para remover a aparência padrão (pode ajudar na consistência) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid #171310;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+/* 4. Estiliza as opções dentro da lista suspensa */
+select option {
+  /* Garante que a lista suspensa também seja escura */
+  background-color: #171310; /* Cinza escuro/preto */
+  color: #ffffff;
+}
+
+.field-container {
+  display: grid;
+  /* Define duas colunas de tamanho igual */
+  grid-template-columns: 1fr 1fr;
+  gap: 16px; /* Espaço entre as colunas */
+}

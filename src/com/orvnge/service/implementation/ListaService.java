@@ -74,4 +74,21 @@ public class ListaService implements ILista {
         }
         return arr;
     }
+    public JSONArray ListarContaUsuario(int idCli) {
+        ContaUsuarioDAO dao = new ContaUsuarioDAO();
+        List<ContaUsuario> contaUsr = dao.listarTodos(idCli);
+
+        JSONArray arr = new JSONArray();
+
+        for(ContaUsuario cu : contaUsr) {
+            JSONObject obj = new JSONObject();
+            obj.put("idConta", cu.getIdConta());
+            obj.put("conta", cu.getConta());
+            obj.put("saldoInicial", cu.getSaldoInicial());
+            obj.put("clientId", cu.getIdCli());
+            obj.put("tipoContaId", cu.getIdTipoConta());
+            arr.put(obj);
+        }
+        return arr;
+    }
 }

@@ -16,6 +16,5 @@ public class DeleterMovServlet extends HttpServlet {
         service.excluirMovimentacao(Integer.parseInt(idMov));
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.sendRedirect("/orvnge/movimentacao/listar-movimentacoes");
     }
 }

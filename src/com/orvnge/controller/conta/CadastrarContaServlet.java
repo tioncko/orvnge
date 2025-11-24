@@ -13,7 +13,6 @@ public class CadastrarContaServlet extends HttpServlet {
         String idConta = request.getParameter("idConta");
         String numConta = request.getParameter("numConta");
         String saldo = request.getParameter("saldoInicial");
-        String idUsuario = request.getParameter("idUsuario");
         String idBanco = request.getParameter("idBanco");
         String idTipoConta = request.getParameter("idTipoConta");
         String cpf = request.getParameter("cpf");
@@ -25,7 +24,6 @@ public class CadastrarContaServlet extends HttpServlet {
                 Double.parseDouble(saldo),
                 Integer.parseInt(idBanco),
                 Integer.parseInt(idTipoConta),
-                Integer.parseInt(idUsuario),
                 cpf
         );
 

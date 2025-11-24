@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.orvnge.database.service.DBConnection;
 import com.orvnge.model.entities.core.Banco;
+import com.orvnge.model.entities.core.Movimentacao;
 
 public class BancoDAO {
     public Banco buscarPorId(int idBanco) {
@@ -54,4 +55,5 @@ public class BancoDAO {
         banco.setNome(rs.getString("nome"));
         return banco;
     }
+
 }

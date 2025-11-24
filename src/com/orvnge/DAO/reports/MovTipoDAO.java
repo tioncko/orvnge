@@ -35,6 +35,7 @@ public class MovTipoDAO {
 
     private MovTipo montarMovTipo(ResultSet rs) throws SQLException {
         MovTipo movTipo = new MovTipo();
+        movTipo.setId(rs.getInt("id"));
         movTipo.setMesAno(rs.getString("mesano"));
         movTipo.setNomeGrupo(rs.getString("nomegrupo"));
         movTipo.setInfoDesc(rs.getString("infodesc"));

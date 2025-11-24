@@ -50,7 +50,7 @@ public class GrupoMovDAO {
     public GrupoMov montarGrupoMov(ResultSet rs) throws SQLException {
         GrupoMov grupoMov = new GrupoMov();
         grupoMov.setIdGrupoMov(rs.getInt("idGrupoMov"));
-        grupoMov.setNome(rs.getString("nome"));
+        grupoMov.setNome(rs.getString("nomeGrupoMov"));
 
         TipoMovDAO dao = new TipoMovDAO();
         TipoMov tipoMov = dao.buscarPorId(rs.getInt("idTipoMov"));

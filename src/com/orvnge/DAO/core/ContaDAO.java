@@ -130,9 +130,8 @@ public class ContaDAO {
 
         UsuarioDAO dao_us = new UsuarioDAO();
         Usuario usuario =
-                dao_us.buscarPorCpf(
-                        rs.getString("cpf"),
-                        rs.getInt("IdCliente"));
+                dao_us.buscarPorId(
+                        rs.getInt("idCliente"));
         conta.setUsuario(usuario);
 
         return conta;
